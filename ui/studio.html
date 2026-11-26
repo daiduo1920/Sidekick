@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="atelier-light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KuroStudio · 多风格桌面伴侣美术工坊</title>
+  <link rel="stylesheet" href="studio.css" />
+</head>
+<body>
+  <div class="studio-shell">
+    <!-- Top Editorial Navigation Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 28 28" width="22" height="22">
+            <path d="M5 13 L6.5 4 L12.5 9.5 Q14 9 15.5 9.5 L21.5 4 L23 13 Q24.5 22.5 14 23.5 Q3.5 22.5 5 13 Z" fill="#2A2632"/>
+            <ellipse cx="10.2" cy="14.6" rx="2.6" ry="2.7" fill="#E8A838"/>
+            <ellipse cx="17.8" cy="14.6" rx="2.6" ry="2.7" fill="#E8A838"/>
+            <ellipse cx="10.2" cy="14.8" rx="1.2" ry="1.8" fill="#221714"/>
+            <ellipse cx="17.8" cy="14.8" rx="1.2" ry="1.8" fill="#221714"/>
+            <circle cx="9.6" cy="13.8" r="0.85" fill="#FFFDF7"/>
+            <circle cx="17.2" cy="13.8" r="0.85" fill="#FFFDF7"/>
+            <path d="M9.5 21.5 Q14 24 18.5 21.5" stroke="#D65A3E" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">KuroStudio</span>
+          <span class="brand-tag">桌面伴侣美术工坊</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" id="nav-tabs">
+        <button class="nav-tab active" data-tab="avatar">角色模型库</button>
+        <button class="nav-tab" data-tab="smart">互动与感知</button>
+        <button class="nav-tab" data-tab="workshop">外部模型生态</button>
+        <button class="nav-tab" data-tab="system">姿态与窗口</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <div class="status-pill" id="live-status-pill">
+          <span class="status-dot"></span>
+          <span id="live-ctx-label">日常通用</span>
+        </div>
+        <button class="theme-toggle-btn" id="btn-theme-toggle" title="切换和纸浅色 / 墨炭深色界面">浅色画廊</button>
+      </div>
+    </header>
+
+    <!-- Main 2-Column Editorial Studio Workspace -->
+    <main class="workspace">
+      <!-- Left Sticky Interactive Live Preview Stage -->
+      <aside class="preview-rail">
+        <div class="preview-card">
+          <div class="preview-header">
+            <span class="preview-title">实时画布预览</span>
+            <div class="bg-switcher" id="bg-switcher" title="切换预览纸面与壁纸环境">
+              <button class="bg-chip active" data-bg="paper" title="和纸浅底"></button>
+              <button class="bg-chip" data-bg="stone" title="素灰桌面"></button>
+              <button class="bg-chip" data-bg="charcoal" title="深夜暗桌"></button>
+              <button class="bg-chip" data-bg="grid" title="透明网格"></button>
+            </div>
+          </div>
+
+          <div id="preview-viewport" class="preview-viewport bg-paper">
+            <canvas id="pv-2d" class="pv-layer active"></canvas>
+            <canvas id="pv-3d" class="pv-layer"></canvas>
+            <canvas id="pv-fx" class="pv-fx"></canvas>
+            <div class="preview-hint" id="preview-hint">移动鼠标测试真实眼动 · 靠近对焦 · 轻抚头顶</div>
+          </div>
+
+          <!-- 1-Click Expression & Motion Playground -->
+          <div class="demo-bar">
+            <button class="demo-pill" data-demo="type">敲键盘</button>
+            <button class="demo-pill" data-demo="pet">摸摸头</button>
+            <button class="demo-pill" data-demo="undo_panic">Ctrl+Z</button>
+            <button class="demo-pill" data-demo="save_zen">Ctrl+S</button>
+            <button class="demo-pill" data-demo="cv_flurry">CV连击</button>
+            <button class="demo-pill" data-demo="dizzy">转圈晕</button>
+            <button class="demo-pill" data-demo="music">音乐节拍</button>
+            <button class="demo-pill" data-demo="sleep">趴桌小憩</button>
+          </div>
+        </div>
+
+        <!-- Live Telemetry Summary Card -->
+        <div class="telemetry-card">
+          <div class="tele-grid">
+            <div class="tele-metric">
+              <span class="tele-label">今日敲击</span>
+              <span class="tele-val" id="tele-keys">0</span>
+            </div>
+            <div class="tele-metric">
+              <span class="tele-label">今日点击</span>
+              <span class="tele-val" id="tele-clicks">0</span>
+            </div>
+            <div class="tele-metric">
+              <span class="tele-label">前台感知</span>
+              <span class="tele-val small" id="tele-app">日常通用</span>
+            </div>
+          </div>
+          <div class="audio-meter-row">
+            <span class="audio-meter-label">系统音频律动</span>
+            <div class="audio-meter-track">
+              <div class="audio-meter-fill" id="audio-meter-fill"></div>
+            </div>
+            <span class="audio-meter-state" id="audio-meter-state">静音</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Scrollable Configuration Panels -->
+      <section class="config-panel">
+
+        <!-- TAB 1: 角色模型库 -->
+        <div class="tab-pane active" id="tab-avatar">
+          <div class="section-head">
+            <h2>VRM 3D 动漫角色 &amp; Live2D / BongoCat 模型库</h2>
+            <p>内置 4 款官方开源/公开许可 3D 动漫 VRM 角色（Three.js + MToon 三渲二 + 头发弹簧物理 + 窗沿坐姿晃腿），并无缝兼容社区 Live2D、BongoCat / BongoCatMver 与 VRoid 外部模型。</p>
+          </div>
+
+          <div class="card-grid cols-2" id="avatar-grid"></div>
+
+          <!-- VRM 3D Camera, Shader & Expression Controls (visible for VRM 3D models) -->
+          <div class="sub-card spaced-sm hidden" id="vrm-controls-card">
+            <div class="sub-row">
+              <div>
+                <div class="row-title">3D 构图视角</div>
+                <div class="row-desc">半身桌伴突出精致五官与发丝；全身展示呈现完整站姿或窗沿晃腿坐姿（右键拖拽可 360° 观察）</div>
+              </div>
+              <div class="seg-control" id="vrmcam-seg">
+                <button class="seg-opt" data-val="bust">半身桌伴</button>
+                <button class="seg-opt" data-val="full">全身展示</button>
+              </div>
+            </div>
+            <div class="sub-row spaced-sm">
+              <div>
+                <div class="row-title">3D 渲染着色风格</div>
+                <div class="row-desc">在二次元 MToon 三渲二与高对比棚拍光效间切换</div>
+              </div>
+              <div class="seg-control" id="shader3d-seg">
+                <button class="seg-opt" data-val="mtoon">MToon 三渲二</button>
+                <button class="seg-opt" data-val="pbr">棚拍高光</button>
+              </div>
+            </div>
+            <div class="sub-row spaced-sm">
+              <div>
+                <div class="row-title">VRM 快捷表情试玩</div>
+                <div class="row-desc">直接驱动模型内置 MorphTarget 表情混合形变，同步至桌面</div>
+              </div>
+              <button class="ghost-btn" id="btn-clear-vrma">恢复程序化姿态</button>
+            </div>
+            <div class="expr-strip" id="vrm-expr-strip"></div>
+          </div>
+
+          <!-- Live2D / BongoCat Runtime Expression & Motion Controls (visible for Live2D models) -->
+          <div class="sub-card spaced-sm hidden" id="l2d-controls-card">
+            <div class="sub-row">
+              <div>
+                <div class="row-title">Live2D / BongoCat 实时表情与动作</div>
+                <div class="row-desc" id="l2d-ctrl-desc">自动解析模型的 exp3.json 表情与 motion3.json 动作，点击立即触发</div>
+              </div>
+              <button class="ghost-btn" id="btn-l2d-import-core-inline">导入 Cubism Core</button>
+            </div>
+            <div class="expr-strip" id="l2d-expr-strip"></div>
+            <div class="expr-strip" id="l2d-motion-strip"></div>
+          </div>
+
+          <div class="section-head spaced">
+            <h2>互动微粒与环境光情绪色</h2>
+            <p>同步调节壁纸边缘补光色调与快捷键互动特效微粒颜色。</p>
+          </div>
+          <div class="palette-strip" id="palette-strip"></div>
+        </div>
+
+        <!-- TAB 3: 互动与感知 -->
+        <div class="tab-pane" id="tab-smart">
+          <div class="section-head">
+            <h2>真实眼神追踪与亲密互动</h2>
+            <p>按屏幕绝对像素计算双眼到光标向量，无论桌宠放在屏幕任何角落，眼神都会精准看向你的鼠标。</p>
+          </div>
+
+          <div class="toggle-group">
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">真实眼随鼠动</div>
+                <div class="row-desc">屏幕空间真实视线锁定，而非机械百分比映射</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="eyeTrackCursor" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">靠近对焦与转圈彩蛋</div>
+                <div class="row-desc">鼠标贴近时双瞳微微内聚并好奇歪头；快速绕眼画圈会触发转圈晕乎眼</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="eyeProximityFX" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">鼠标摸头呼噜互动</div>
+                <div class="row-desc">光标轻抚头顶触发蹭手、眯眼笑、腮红与轻柔呼噜微震</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="petting" />
+            </label>
+          </div>
+
+          <div class="section-head spaced">
+            <h2>本地离线桌面感知引擎</h2>
+            <p>完全在本地离线运行，零数据上传、零输入内容记录。</p>
+          </div>
+
+          <div class="toggle-group">
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">应用上下文感知（写代码 / 游戏 / 听歌 / 画图）</div>
+                <div class="row-desc">识别前台软件类型，自动切换数位板、手柄、咖啡杯或耳机</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="appContextAuto" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">Windows 系统音频实时律动（WASAPI Loopback）</div>
+                <div class="row-desc">无需麦克风，角色随电脑音乐真实鼓点点头摇晃、飘出音符</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="audioReactive" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">高频快捷键专属梗表情</div>
+                <div class="row-desc">连按 Ctrl+Z 冒汗珠、Ctrl+S 安心光波、CV 狂按星星眼、狠拍 Enter 冲击波</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="shortcutMemes" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">壁纸环境光融合</div>
+                <div class="row-desc">后台低频采样桌宠周边色调，自动适配高光暖冷与投影深浅</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="ambientFusion" />
+            </label>
+          </div>
+
+          <div class="section-head spaced">
+            <h2>机械轴声学手感</h2>
+          </div>
+
+          <div class="sub-card">
+            <label class="toggle-row plain">
+              <div>
+                <div class="row-title">启用柔润敲击与呼噜音效</div>
+                <div class="row-desc">内置程序化客制化轴体合成，并支持在外部生态导入实录 .wav 轴音</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="sound" />
+            </label>
+            <div class="sound-pack-list" id="sound-pack-list"></div>
+            <div class="slider-row">
+              <span class="slider-label">音效音量</span>
+              <input type="range" id="vol-slider" min="0" max="100" step="1" />
+              <span class="slider-val" id="vol-val">72%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: 外部模型生态 -->
+        <div class="tab-pane" id="tab-workshop">
+          <div class="section-head">
+            <h2>外部专业模型生态 · Live2D / VRM / 分件立绘</h2>
+            <p>支持直接导入商业级画师 Live2D、BongoCat 社区模型、VRoid VRM 三渲二角色以及 PSD 导出分件包。</p>
+          </div>
+
+          <!-- Engine Readiness Strip -->
+          <div class="engine-strip">
+            <div class="engine-badge-card">
+              <div class="engine-top">
+                <span class="engine-name">VRM 3D 完整引擎（Three.js + three-vrm）</span>
+                <span class="engine-pill ok">原生离线内置</span>
+              </div>
+              <div class="engine-desc">支持 VRM 0.x/1.0、真实 MToon 描边与阴影、SpringBone 头发物理、MorphTarget 表情、UV/骨骼眼动、VRMA 动作与窗沿晃腿坐姿</div>
+            </div>
+            <div class="engine-badge-card">
+              <div class="engine-top">
+                <span class="engine-name">Live2D Cubism 4/5 + BongoCat 引擎</span>
+                <span class="engine-pill" id="cubism-status-pill">待导入 Core</span>
+              </div>
+              <div class="engine-desc">完整蒙版裁剪、physics3 物理、exp3 表情、motion3 动作、pose3 部件，并原生兼容 BongoCat / BongoCatMver 逐键手部与键帽图层</div>
+              <button class="ghost-btn engine-btn" id="btn-import-cubism">导入 live2dcubismcore.min.js</button>
+            </div>
+          </div>
+
+          <div class="import-grid spaced-sm">
+            <button class="import-card featured" data-import="zip">
+              <div class="import-badge">推荐 · ZIP 一键包</div>
+              <div class="import-title">导入 BongoCat / Mver / Live2D / VRM 压缩包 (.zip)</div>
+              <div class="import-desc">直接导入 Awesome-BongoCat、BongoCatMver（含 config.json + hand/keyboard）、Live2D 或 VRM 包，自动生成键位图层与封面</div>
+            </button>
+            <button class="import-card" data-import="avatar3d">
+              <div class="import-badge">VRM 0.x / 1.0</div>
+              <div class="import-title">导入 3D 动漫角色 (.vrm / .glb)</div>
+              <div class="import-desc">支持 VRoid Studio / VRoid Hub / Booth 任意 VRM 模型，自动提取内嵌头像、头发物理与全部表情</div>
+            </button>
+            <button class="import-card" data-import="live2d">
+              <div class="import-badge">LIVE2D MODEL3</div>
+              <div class="import-title">导入 Live2D 模型入口 (.model3.json)</div>
+              <div class="import-desc">完整拷贝 .moc3、贴图、physics3 物理、exp3 表情与 motion3 动作，零冗余文件</div>
+            </button>
+            <button class="import-card" data-import="vrma">
+              <div class="import-badge">VRMA 动作</div>
+              <div class="import-title">导入 VRM 3D 动作文件 (.vrma)</div>
+              <div class="import-desc">为任意 VRM 3D 角色加载自定义骨骼动画，同时保留眼神追踪与实时表情叠加</div>
+            </button>
+            <button class="import-card" data-import="avatar25d">
+              <div class="import-badge">PNG / WEBP / SVG</div>
+              <div class="import-title">导入高清透明立绘</div>
+              <div class="import-desc">单张透明底二次元立绘，自动赋予呼吸、鼠标跟随与弹性反馈</div>
+            </button>
+            <button class="import-card" data-import="soundpack">
+              <div class="import-badge">WAV / MP3 / OGG</div>
+              <div class="import-title">导入实录机械轴按键音效</div>
+              <div class="import-desc">导入喜欢的真实轴体采样音频，自动按键位与空格微调音高</div>
+            </button>
+          </div>
+
+          <div class="section-head spaced">
+            <h2>海量免费高质量模型来源直达</h2>
+            <p>所有主流二次元 3D 与 Live2D 社区资源下载后，直接点击上方按钮即可秒用。</p>
+          </div>
+          <div class="eco-links">
+            <button class="eco-link-btn" data-url="https://github.com/ayangweb/Awesome-BongoCat">
+              <span class="eco-link-title">Awesome-BongoCat 社区模型库 ↗</span>
+              <span class="eco-link-desc">大量画师精绘二次元敲键盘包（邦布、星铁、原神、动漫等 .zip）</span>
+            </button>
+            <button class="eco-link-btn" data-url="https://hub.vroid.com/">
+              <span class="eco-link-title">VRoid Hub 免费 3D VRM 模型库 ↗</span>
+              <span class="eco-link-desc">数万款免费/开源二次元 3D 角色，或用 VRoid Studio 自由捏脸换装</span>
+            </button>
+            <button class="eco-link-btn" data-url="https://www.live2d.com/zh-CHS/learn/sample/">
+              <span class="eco-link-title">Live2D 官方免费范例（Mao / Hiyori / Ren）↗</span>
+              <span class="eco-link-desc">商业级画师 Live2D 官方样本与免费 Cubism SDK for Web Core 下载</span>
+            </button>
+            <button class="eco-link-btn" data-url="https://www.live2d.com/en/sdk/download/web/">
+              <span class="eco-link-title">获取 live2dcubismcore.min.js 运行时 ↗</span>
+              <span class="eco-link-desc">下载 Live2D Cubism SDK for Web，取出 Core/live2dcubismcore.min.js 导入即可</span>
+            </button>
+          </div>
+
+          <!-- Anchor Calibrator for Custom Imported Models -->
+          <div class="sub-card spaced-sm" id="calibrator-card">
+            <div class="cal-head">
+              <div>
+                <div class="row-title">构图缩放与眼神锚点校准</div>
+                <div class="row-desc">微调模型画面大小、上下位置与屏幕眼神追踪中心</div>
+              </div>
+              <button class="ghost-btn" id="btn-open-assets">打开本地资产目录</button>
+            </div>
+            <div class="cal-sliders">
+              <div class="slider-row">
+                <span class="slider-label">眼位水平 X</span>
+                <input type="range" id="cal-eyex" min="20" max="80" step="1" />
+                <span class="slider-val" id="cal-eyex-val">48%</span>
+              </div>
+              <div class="slider-row">
+                <span class="slider-label">眼位垂直 Y</span>
+                <input type="range" id="cal-eyey" min="15" max="75" step="1" />
+                <span class="slider-val" id="cal-eyey-val">34%</span>
+              </div>
+              <div class="slider-row">
+                <span class="slider-label">模型缩放</span>
+                <input type="range" id="cal-scale" min="50" max="180" step="2" />
+                <span class="slider-val" id="cal-scale-val">100%</span>
+              </div>
+              <div class="slider-row">
+                <span class="slider-label">上下偏移</span>
+                <input type="range" id="cal-offy" min="-80" max="80" step="2" />
+                <span class="slider-val" id="cal-offy-val">0 px</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-head spaced">
+            <h2>已导入的本地模型与音效</h2>
+          </div>
+          <div class="custom-list" id="custom-asset-list"></div>
+        </div>
+
+        <!-- TAB 5: 窗口与热键 -->
+        <div class="tab-pane" id="tab-system">
+          <div class="section-head">
+            <h2>桌宠停靠形态与窗口控制</h2>
+            <p>桌宠窗口始终保持 100% 纯净无悬停按钮，一切调整都在此后台工坊完成。</p>
+          </div>
+
+          <div class="sub-card">
+            <div class="sub-row">
+              <div>
+                <div class="row-title">摆放形态</div>
+                <div class="row-desc">桌面工位可自由拖动；趴窗磁吸会自动趴在当前活动窗口顶部边缘</div>
+              </div>
+              <div class="seg-control" id="dockmode-seg">
+                <button class="seg-opt" data-val="desk">桌面工位</button>
+                <button class="seg-opt" data-val="peek">趴窗磁吸</button>
+              </div>
+            </div>
+            <div class="slider-row spaced-sm">
+              <span class="slider-label">桌宠窗口大小</span>
+              <input type="range" id="scale-slider" min="55" max="180" step="5" />
+              <span class="slider-val" id="scale-val">100%</span>
+            </div>
+          </div>
+
+          <div class="toggle-group spaced-sm">
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">鼠标穿透锁定</div>
+                <div class="row-desc">开启后所有点击直达底层应用，完全零误触（快捷键 Ctrl+Alt+P）</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="clickThrough" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">始终置顶显示</div>
+                <div class="row-desc">让角色悬浮在普通工作窗口上方</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="topMost" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">桌面显示极简计数角标</div>
+                <div class="row-desc">默认关闭以保持桌宠 100% 纯净，可按需开启</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="showMiniCounter" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">全屏游戏 / 观影时自动休眠省电</div>
+                <div class="row-desc">检测到全屏独占应用时自动暂停动画与敲击音效，退出全屏立即恢复</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="pauseOnFullscreen" />
+            </label>
+            <label class="toggle-row">
+              <div>
+                <div class="row-title">开机自动启动</div>
+                <div class="row-desc">随 Windows 登录自动安静启动桌宠陪伴</div>
+              </div>
+              <input type="checkbox" class="ios-switch" data-cfg="autoStart" />
+            </label>
+          </div>
+
+          <div class="section-head spaced">
+            <h2>全局快捷键速查与状态</h2>
+          </div>
+
+          <div class="hotkey-grid">
+            <div class="hk-item"><kbd>Ctrl + Alt + S</kbd><span>打开 / 隐藏工坊</span><em class="hk-status" data-hk="s">已生效</em></div>
+            <div class="hk-item"><kbd>Ctrl + Alt + D</kbd><span>桌面 / 趴窗切换</span><em class="hk-status" data-hk="d">已生效</em></div>
+            <div class="hk-item"><kbd>Ctrl + Alt + P</kbd><span>鼠标穿透锁定</span><em class="hk-status" data-hk="p">已生效</em></div>
+            <div class="hk-item"><kbd>Ctrl + Alt + H</kbd><span>隐藏 / 显示桌宠</span><em class="hk-status" data-hk="h">已生效</em></div>
+          </div>
+
+          <div class="sys-footer-actions">
+            <button class="ghost-btn" id="btn-reset-pos">复位桌宠至右下角</button>
+            <button class="danger-btn" id="btn-quit-app">完全退出 KuroDesk</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script type="module" src="vendor/vrmBridge.js"></script>
+  <script src="core/bus.js"></script>
+  <script src="core/keymap.js"></script>
+  <script src="core/registry.js"></script>
+  <script src="core/soundEngine.js"></script>
+  <script src="core/stateMachine.js"></script>
+  <script src="renderers/vrmRenderer.js"></script>
+  <script src="renderers/live2dRenderer.js"></script>
+  <script src="renderers/custom2dRenderer.js"></script>
+  <script src="renderers/fxLayer.js"></script>
+  <script src="renderers/stagePipeline.js"></script>
+  <script src="studio/studioApp.js"></script>
+</body>
+</html>

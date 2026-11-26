@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KuroDesk</title>
+  <link rel="stylesheet" href="pet.css" />
+</head>
+<body>
+  <div id="pet-stage" class="pet-stage">
+    <canvas id="canvas-2d" class="layer active"></canvas>
+    <canvas id="canvas-3d" class="layer"></canvas>
+    <canvas id="canvas-fx" class="fx-layer"></canvas>
+    <!-- Zero hover HUD! Only optional subtle counter if explicitly enabled in KuroStudio -->
+    <div id="mini-counter" class="mini-counter hidden">
+      <span id="mc-keys">0</span>
+      <span class="mc-dot">·</span>
+      <span id="mc-clicks">0</span>
+    </div>
+  </div>
+
+  <script type="module" src="vendor/vrmBridge.js"></script>
+  <script src="core/bus.js"></script>
+  <script src="core/keymap.js"></script>
+  <script src="core/registry.js"></script>
+  <script src="core/soundEngine.js"></script>
+  <script src="core/stateMachine.js"></script>
+  <script src="renderers/vrmRenderer.js"></script>
+  <script src="renderers/live2dRenderer.js"></script>
+  <script src="renderers/custom2dRenderer.js"></script>
+  <script src="renderers/fxLayer.js"></script>
+  <script src="renderers/stagePipeline.js"></script>
+  <script src="pet.js"></script>
+</body>
+</html>
